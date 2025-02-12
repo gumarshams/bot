@@ -12,7 +12,7 @@ openai_api_key = os.getenv("OPENAI")  # Замените на ваш API клю�
 
 
 # Инициализация клиента OpenAI
-openai.api_key = openai_api_key
+openai.api_key = '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'
 
 # Функция для начала общения с ботом
 async def start(update: Update, context: CallbackContext) -> None:
