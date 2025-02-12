@@ -10,6 +10,7 @@ load_dotenv()
 telegram_token = os.getenv("TELEGRAM_TOKEN")  # Замените на ваш токен Telegram
 openai_api_key = os.getenv("OPENAI")  # Замените на ваш API ключ OpenAI
 
+
 # Инициализация клиента OpenAI
 openai.api_key = openai_api_key
 
@@ -52,21 +53,14 @@ async def handle_message(update: Update, context: CallbackContext) -> None:
 
     try:
         # Вызов OpenAI API для генерации текста (новая версия API)
-        response = openai.ChatCompletion.create(
+        response = openai.completions.create(
             model="gpt-3.5-turbo",  # Указываем модель
-            messages=[  # Список сообщений для генерации ответа
-                {"role": "user", "content": user_message},
-            ]
+            prompt=user_message,  # Сообщение пользователя
+            max_tokens=150  # Опциональный параметр для контроля длины ответа
         )
 
-        # Выводим структуру ответа для отладки
-        print("Ответ от OpenAI:", response)
-
-        # Печатаем полный ответ для отладки (можно убрать на продакшн)
-        print("Полный ответ от OpenAI:", response)
-
         # Извлекаем текст ответа
-        generated_text = response['choices'][0]['message']['content'].strip()  # Доступ к генерируемому тексту
+        generated_text = response['choices'][0]['text'].strip()
 
         # Отправка текста в ответ
         await send_long_message(update, generated_text)
