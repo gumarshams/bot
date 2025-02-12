@@ -39,6 +39,8 @@ pydantic-core==2.27.2
     # via pydantic
 python-dateutil==2.9.0.post0
     # via mistralai
+python-dotenv==1.0.1
+    # via -r requirements.in
 python-telegram-bot==21.10
     # via -r requirements.in
 six==1.17.0
