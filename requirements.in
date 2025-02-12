@@ -1,8 +1,4 @@
 python-telegram-bot
-<<<<<<< HEAD
 openai
-=======
-mistralai
->>>>>>> 9333ca3fa05f3a38958994959aa5b0169779ac88
 httpx
 python-dotenv
