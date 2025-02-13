@@ -25,7 +25,7 @@ quotes = [
 ]
 
 # Ссылка на ваш канал в Telegram
-channel_url = "https://t.me/your_channel"  # Замените на вашу ссылку на канал
+channel_url = "https://t.me/gumAiBot"  # Замените на вашу ссылку на канал
 
 # Функция для начала общения с ботом
 async def start(update: Update, context: CallbackContext) -> None:
@@ -125,8 +125,8 @@ async def handle_message(update: Update, context: CallbackContext) -> None:
         return
 
     try:
-        # Вызов OpenAI API для генерации текста (новая версия API)
-        response = openai.completions.create(
+        # Вызов OpenAI API для генерации текста
+        response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",  # Указываем модель
             messages=[  # Список сообщений для генерации ответа
                 {
@@ -167,3 +167,5 @@ def main() -> None:
 
 if __name__ == '__main__':
     main()
+
+
