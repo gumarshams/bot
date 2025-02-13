@@ -24,7 +24,7 @@ quotes = [
 ]
 
 # Ссылка на ваш канал в Telegram
-channel_url = "https://t.me/your_channel"  # Замените на вашу ссылку на канал
+channel_url = "https://t.me/gumAiBot"  # Замените на вашу ссылку на канал
 
 # Функция для начала общения с ботом
 async def start(update: Update, context: CallbackContext) -> None:
