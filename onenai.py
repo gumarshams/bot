@@ -125,8 +125,8 @@ async def handle_message(update: Update, context: CallbackContext) -> None:
         return
 
     try:
-        # Вызов OpenAI API для генерации текста
-        response = openai.ChatCompletion.create(
+        # Вызов OpenAI API для генерации текста (новая версия API)
+        response = openai.completions.create(
             model="gpt-3.5-turbo",  # Указываем модель
             messages=[  # Список сообщений для генерации ответа
                 {
