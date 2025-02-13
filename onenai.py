@@ -111,7 +111,7 @@ async def handle_message(update: Update, context: CallbackContext) -> None:
 
         # Генерация ответа от Mistral на основе пользовательского сообщения
         chat_response = client.chat.complete(
-            model="codestral-latest",  # Указываем модель
+            model="mistral-large-latest",  # Указываем модель
             messages=[{
                 "role": "user",
                 "content": user_message,
