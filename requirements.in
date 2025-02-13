@@ -1,5 +1,5 @@
 python-telegram-bot
 requests
-openai
+mistralai
 httpx
 python-dotenv

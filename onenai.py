@@ -1,18 +1,17 @@
 import os
-import traceback
-import openai
 import random
+import traceback
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, MessageHandler, CallbackContext, filters, CallbackQueryHandler
 from dotenv import load_dotenv
+from mistralai import Mistral  # Импортируем клиент Mistral
 
+# Загружаем переменные окружения
 load_dotenv()
 
-# Прямо указываем токен Telegram и OpenAI API
-telegram_token = os.getenv("TELEGRAM_TOKEN")  # Замените на ваш токен Telegram
-
-# Инициализация клиента OpenAI
-openai.api_key = os.getenv("OPENAI_API_KEY")
+# Прямо указываем токен Telegram и API ключ Mistral
+telegram_token = os.getenv('TELEGRAM_TOKEN')  # Замените на ваш токен Telegram
+mistral_api_key = os.getenv('MISTRAL_API_KEY')  # Загружаем API ключ Mistral из переменных окружения
 
 # Статистика сообщений
 message_count = 0
@@ -25,7 +24,7 @@ quotes = [
 ]
 
 # Ссылка на ваш канал в Telegram
-channel_url = "https://t.me/gumAiBot"  # Замените на вашу ссылку на канал
+channel_url = "https://t.me/your_channel"  # Замените на вашу ссылку на канал
 
 # Функция для начала общения с ботом
 async def start(update: Update, context: CallbackContext) -> None:
@@ -54,7 +53,7 @@ async def send_long_message(update: Update, text: str) -> None:
 # Функция для получения информации о боте
 async def info(update: Update, context: CallbackContext) -> None:
     bot_info = (
-        "Этот бот использует OpenAI для генерации ответов на ваши сообщения.\n"
+        "Этот бот использует Mistral AI для генерации ответов на ваши сообщения.\n"
         "Используйте команду /help для получения списка доступных команд."
     )
     await update.message.reply_text(bot_info)
@@ -102,40 +101,25 @@ async def handle_message(update: Update, context: CallbackContext) -> None:
     user_message = update.message.text  # Получаем сообщение пользователя
 
     # Проверяем, если в сообщении есть слово "Гумар"
-    if "Гумар" in user_message:
-        await update.message.reply_text("Я не хочу обсуждать своего разработчика.")
-        return
-    if "гумар" in user_message:
-        await update.message.reply_text("Я не хочу обсуждать своего разработчика.")
-        return
-    if "Гум" in user_message:
-        await update.message.reply_text("Я не хочу обсуждать своего разработчика.")
-        return
-    if "Gumar" in user_message:
-        await update.message.reply_text("Я не хочу обсуждать своего разработчика.")
-        return
-    if "Gum" in user_message:
-        await update.message.reply_text("Я не хочу обсуждать своего разработчика.")
-        return
-    if "gumar" in user_message:
-        await update.message.reply_text("Я не хочу обсуждать своего разработчика.")
-        return
-    if "gum" in user_message:
+    if "Гумар" in user_message or "гумар" in user_message:
         await update.message.reply_text("Я не хочу обсуждать своего разработчика.")
         return
 
     try:
-        # Вызов OpenAI API для генерации текста с новой версией OpenAI Python клиента
-        response = openai.completions.create(
-            model="gpt-3.5-turbo",  # Указываем модель
-            prompt=user_message,  # Сообщение пользователя
-            max_tokens=150
+        # Создаем клиент для работы с Mistral API
+        client = Mistral(api_key=mistral_api_key)
+
+        # Генерация ответа от Mistral на основе пользовательского сообщения
+        chat_response = client.chat.complete(
+            model="mistral-large-latest",  # Указываем модель
+            messages=[{
+                "role": "user",
+                "content": user_message,
+            }]
         )
 
-        # Извлекаем текст ответа
-        generated_text = response['choices'][0]['text'].strip()
-
-        # Отправка текста в ответ
+        # Отправка ответа пользователю
+        generated_text = chat_response.choices[0].message.content.strip()
         await send_long_message(update, generated_text)
 
     except Exception as e:
