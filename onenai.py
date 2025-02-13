@@ -5,6 +5,7 @@ import random
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, MessageHandler, CallbackContext, filters, CallbackQueryHandler
 from dotenv import load_dotenv
+
 load_dotenv()
 
 # Прямо указываем токен Telegram и OpenAI API
@@ -124,19 +125,15 @@ async def handle_message(update: Update, context: CallbackContext) -> None:
         return
 
     try:
-        # Вызов OpenAI API для генерации текста
-        response = openai.ChatCompletion.create(
+        # Вызов OpenAI API для генерации текста с новой версией OpenAI Python клиента
+        response = openai.completions.create(
             model="gpt-3.5-turbo",  # Указываем модель
-            messages=[  # Список сообщений для генерации ответа
-                {
-                    "role": "user",
-                    "content": user_message,  # Сообщение пользователя
-                },
-            ]
+            prompt=user_message,  # Сообщение пользователя
+            max_tokens=150
         )
 
         # Извлекаем текст ответа
-        generated_text = response['choices'][0]['message']['content'].strip()
+        generated_text = response['choices'][0]['text'].strip()
 
         # Отправка текста в ответ
         await send_long_message(update, generated_text)
@@ -166,5 +163,3 @@ def main() -> None:
 
 if __name__ == '__main__':
     main()
-
-
