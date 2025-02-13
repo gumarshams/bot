@@ -11,7 +11,7 @@ load_dotenv()
 telegram_token = os.getenv("TELEGRAM_TOKEN")  # Замените на ваш токен Telegram
 
 # Инициализация клиента OpenAI
-openai.api_key = os.getenv("OPENAI")
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # Статистика сообщений
 message_count = 0
